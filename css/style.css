@@ -1,0 +1,12 @@
+#debug-window {
+	background-color:#eee;
+	position: absolute;
+	bottom:0;
+	padding:10px 0;
+	right:0;
+	text-align:right;
+	width:100%;
+}
+#debug-window.hidden {
+	display:none;
+}

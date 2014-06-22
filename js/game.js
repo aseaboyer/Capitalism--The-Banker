@@ -5,12 +5,15 @@ var requestAnimationFrame =
 	window.mozRequestAnimationFrame ||
 	window.webkitRequestAnimationFrame || 
 	window.msRequestAnimationFrame;
-	
+
+var player = new Player();
+
 var game = {
 	canvas: {},
 	context: {},
 	phase: "menu",
 	phases: [ "load game", "menu", "load level", "play", "win", "lost" ], // for ref. @aseaboyer
+	debug: false,
 	time: {
 		last: 0,
 		current: 0,
@@ -54,27 +57,6 @@ var game = {
 	},
 };
 
-var player = {
-	loc: {
-		x: 0,
-		y: 15,
-	},
-	update: function() {
-
-		player.loc.x += player.speed;
-
-		if(player.loc.x <= 0 || player.loc.x >= 400){
-			player.speed = -player.speed;
-		}
-		
-	},
-	speed: 5,
-	draw: function(context) {
-		context.fillStyle = "#ff00ff";
-		context.fillRect(this.loc.x, this.loc.y, 25, 25);
-	},
-};
-
 function start() {
 	game.init(canvas);
 	requestAnimationFrame(animate);
@@ -92,11 +74,34 @@ function animate() {
 	requestAnimationFrame(animate);
 }
 
-start();
-//game.start(canvas);
+window.onload = function() {
+	start();
+	//game.start(canvas);
+}
 
-canvas.addEventListener('mousemove', trackMouse, false);
-function trackMouse(e) {
+canvas.addEventListener('mousemove', function(e) {
     game.cursor.x = e.clientX;
     game.cursor.y = e.clientY;
-}
+}, false);
+
+document.addEventListener('keydown', function(e) {
+	var key = e.keyCode || e.which;
+	var keychar = String.fromCharCode(key);
+	
+	//console.log('keydown: '+keychar);
+	if(keychar == "P" || keychar == "p") {
+		var d = document.getElementById("debug-window");
+		if (game.debug) {
+			console.log("Turn off debugging");
+			game.debug = false;
+			d.style.display = 'none';
+		} else {
+			console.log("Turn on debugging");
+			game.debug = true;
+			d.style.display = 'block';
+		}
+	}
+	
+}, false);
+
+// create a keys watch list with a human readable string value system

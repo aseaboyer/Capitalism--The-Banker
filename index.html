@@ -6,13 +6,15 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-	<div class="logo">Capitalism: The Banker (a roguelike)</div>
+	<div id="logo">Capitalism: The Banker (a roguelike)</div>
 	<canvas width='600' height='600' id="gameCanvas"></canvas>
-	<div class="game-message">
+	<div id="game-message">
 		<p>Move with the arrow keys. Aim with the mouse. Shift or Space to shoot.</p>
 		<p>Aiming to make this a dual stick shooter with popular controllers later.</p>
 	</div>
+	<div id="debug-window" class="hidden">nothing</div>
 	
+	<script src="js/Player.js"></script>
 	<script src="js/game.js"></script>
 </body>
 </html>
