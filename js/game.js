@@ -1,34 +1,73 @@
-var x =  0;
-var y = 15;
-var speed = 5;
+var canvas = document.getElementById("gameCanvas");
+var context = canvas.getContext("2d");
+var requestAnimationFrame =
+	window.requestAnimationFrame || 
+	window.mozRequestAnimationFrame ||
+	window.webkitRequestAnimationFrame || 
+	window.msRequestAnimationFrame;
+	
+var game = {
+	canvas: {},
+	context: {},
+	phase: "menu",
+	phases: [ "load game", "menu", "load level", "play", "win", "lost" ], // for ref. @aseaboyer
+	init: function(canvas) {
+		this.canvas = canvas;
+		this.context = canvas.getContext("2d");
+		
+		this.update();
+	},
+	update: function() {
 
+		player.loc.x += player.speed;
+
+		if(player.loc.x <= 0 || player.loc.x >= 400){
+			player.speed = -player.speed;
+		}
+		
+	},
+	draw: function(context) {
+		context.clearRect(0, 0, this.context.canvas.height, this.context.canvas.width);
+		
+		context.fillStyle = "#ff00ff";
+		context.fillRect(player.loc.x, player.loc.y, 25, 25);
+	},
+	cursor: {
+		x: 0,
+		y: 0,
+		draw: function(context) {
+			context.fillStyle = "#00ffff";
+			context.fillRect(this.x, this.y, 25, 25);
+		},
+	},
+};
+
+var player = {
+	loc: {
+		x: 0,
+		y: 15,
+	},
+	speed: 5,
+};
+
+function start() {
+	game.init(canvas);
+	requestAnimationFrame(animate);
+}
 function animate() {
-
-    reqAnimFrame = window.mozRequestAnimationFrame    ||
-                window.webkitRequestAnimationFrame ||
-                window.msRequestAnimationFrame     ||
-                window.oRequestAnimationFrame
-                ;
-
-    reqAnimFrame(animate);
-
-    x += speed;
-
-    if(x <= 0 || x >= 475){
-        speed = -speed;
-    }
-
-    draw();
+    game.update();
+    game.draw(context);
+	
+    game.cursor.draw(context);
+	
+	requestAnimationFrame(animate);
 }
 
+start();
+//game.start(canvas);
 
-function draw() {
-    var canvas  = document.getElementById("ex1");
-    var context = canvas.getContext("2d");
-
-    context.clearRect(0, 0, 500, 170);
-    context.fillStyle = "#ff00ff";
-    context.fillRect(x, y, 25, 25);
+canvas.addEventListener('mousemove', trackMouse, false);
+function trackMouse(e) {
+    game.cursor.x = e.clientX;
+    game.cursor.y = e.clientY;
 }
-
-animate();
