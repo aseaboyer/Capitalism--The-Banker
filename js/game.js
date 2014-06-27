@@ -37,6 +37,25 @@ var game = {
 			this.delta = diff; // For now, it should be the portion of the second, something along the lines of 0.016
 		},
 	},
+	target: { // may be an array later
+		set: false,
+		editable: true,
+		loc: {
+			x: 0,
+			y: 0,
+		},
+		setTarget: function(newX,newY) {
+			if(this.editable) {
+				this.loc.x = newX;
+				this.loc.y = newY;
+				console.log("Target is now set at: ");
+				console.log(this.loc);
+			}
+		},
+		getTarget: function() {
+			return this.loc;
+		},
+	},
 	init: function(canvas) {
 		this.canvas = canvas;
 		this.context = canvas.getContext("2d");
@@ -97,6 +116,9 @@ window.onload = function() {
 canvas.addEventListener('mousemove', function(e) {
     game.cursor.x = e.clientX - canvas.offsetLeft;
     game.cursor.y = e.clientY - canvas.offsetTop;
+}, false);
+canvas.addEventListener('mouseup', function(e) {
+    game.target.setTarget(game.cursor.x, game.cursor.y); // use add target, which will make decisions on things like limiting the number of targets
 }, false);
 
 document.addEventListener('keydown', function(e) {
