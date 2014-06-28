@@ -8,6 +8,9 @@ var requestAnimationFrame =
 
 var player = new Player();
 
+var keys = new Keyring();
+	keys.add(new Array('w','a','s','d'));
+
 var game = {
 	canvas: {},
 	context: {},
@@ -34,26 +37,38 @@ var game = {
 			}
 			this.current = d.getTime();
 			var diff = this.current - this.last;
-			this.delta = diff; // For now, it should be the portion of the second, something along the lines of 0.016
+			this.delta = diff * 0.1; // For now, it should be the portion of the second, something along the lines of 0.016
 		},
 	},
 	target: { // may be an array later
 		set: false,
 		editable: true,
+		visible: false,
 		loc: {
 			x: 0,
 			y: 0,
 		},
+		size: 25,
 		setTarget: function(newX,newY) {
 			if(this.editable) {
 				this.loc.x = newX;
 				this.loc.y = newY;
-				console.log("Target is now set at: ");
-				console.log(this.loc);
+				
+				this.visible = true;
+				
+			//	console.log("Target is now set at: ");
+			//	console.log(this.loc);
 			}
 		},
 		getTarget: function() {
 			return this.loc;
+		},
+		draw: function(context) {
+			if(this.visible) {
+				context.fillStyle = "#ffcccc";
+				context.fillRect(this.loc.x - (this.size*0.5), this.loc.y - (this.size*0.5), 
+					this.size, this.size);
+			}
 		},
 	},
 	init: function(canvas) {
@@ -85,7 +100,7 @@ var game = {
 		y: 0,
 		size: 25,
 		draw: function(context) {
-			context.fillStyle = "#00ffff";
+			context.fillStyle = "#33ffff";
 			context.fillRect(this.x - (this.size*0.5), this.y - (this.size*0.5), this.size, this.size);
 		},
 	},
@@ -102,7 +117,7 @@ function animate() {
     game.draw(context);
 	
     player.draw(context);
-	
+    game.target.draw(context);
     game.cursor.draw(context);
 	
 	requestAnimationFrame(animate);
@@ -121,7 +136,8 @@ canvas.addEventListener('mouseup', function(e) {
     game.target.setTarget(game.cursor.x, game.cursor.y); // use add target, which will make decisions on things like limiting the number of targets
 }, false);
 
-document.addEventListener('keydown', function(e) {
+// create a keys watch list with a human readable string value system
+document.addEventListener('keypress', function(e) {
 	var key = e.keyCode || e.which;
 	var keychar = String.fromCharCode(key);
 	
@@ -138,7 +154,35 @@ document.addEventListener('keydown', function(e) {
 			d.style.display = 'block';
 		}
 	}
+	if(keychar == "W" || keychar == "w") { // up
+		keys.set('w', 'down');
+	}
+	if(keychar == "A" || keychar == "a") { // left
+		keys.set('a', 'down');
+	}
+	if(keychar == "S" || keychar == "s") { // down
+		keys.set('s', 'down');
+	}
+	if(keychar == "D" || keychar == "d") { // right
+		keys.set('d', 'down');
+	}
 	
 }, false);
-
-// create a keys watch list with a human readable string value system
+document.addEventListener('keyup', function(e) {
+	var key = e.keyCode || e.which;
+	var keychar = String.fromCharCode(key);
+	
+	if(keychar == "W" || keychar == "w") { // up
+		keys.set('w', 'up');
+	}
+	if(keychar == "A" || keychar == "a") { // left
+		keys.set('a', 'up');
+	}
+	if(keychar == "S" || keychar == "s") { // down
+		keys.set('s', 'up');
+	}
+	if(keychar == "D" || keychar == "d") { // right
+		keys.set('d', 'up');
+	}
+	
+}, false);
