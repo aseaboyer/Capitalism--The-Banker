@@ -18,6 +18,14 @@ var game = {
 	phase: "menu",
 	phases: [ "load game", "menu", "load level", "play", "win", "lost" ], // for ref. @aseaboyer
 	debug: false,
+	camera: {
+		xScale: 1,
+		yScale: 1,
+		xSkew: 0,
+		ySkew: 0,
+		xTranslate: 0,
+		yTranslate: 0,
+	},
 	time: {
 		last: 0,
 		current: 0,
@@ -92,8 +100,29 @@ var game = {
 	},
 	draw: function(context) {
 		context.clearRect(0, 0, this.context.canvas.height, this.context.canvas.width);
+		context.setTransform(
+			this.camera.xScale,
+			this.camera.xSkew,
+			this.camera.ySkew,
+			this.camera.yScale,
+			this.camera.xTranslate,
+			this.camera.yTranslate
+		);
+		// handle rotations: context.rotate()
 		
-		// draw background and things here
+		player.draw(context);
+		this.target.draw(context);
+		this.cursor.draw(context);
+		
+		// draw background and things above
+		context.setTransform(
+			1,
+			0,
+			0,
+			1,
+			0,
+			0
+		);
 	},
 	cursor: {
 		x: 0,
@@ -115,10 +144,6 @@ function animate() {
     player.update();
 	
     game.draw(context);
-	
-    player.draw(context);
-    game.target.draw(context);
-    game.cursor.draw(context);
 	
 	requestAnimationFrame(animate);
 }

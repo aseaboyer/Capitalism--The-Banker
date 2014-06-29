@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Testing Threejs</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+</head>
+<body>
+	<script src="js/three.min.js"></script>
+	<script>
+		// set up scene
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
+		
+		// add a cube
+		var geometry = new THREE.CubeGeometry(1,1,1);
+		var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		var cube = new THREE.Mesh( geometry, material );
+		scene.add( cube );
+
+		camera.position.z = 5;
+		
+		// add renderer
+		function render() {
+			requestAnimationFrame(render);
+			renderer.render(scene, camera);
+			
+			// simple rotation animation
+			cube.rotation.x += 0.01;
+			cube.rotation.y += 0.01;
+		}
+		render();
+	</script>
+</body>
+</html>
