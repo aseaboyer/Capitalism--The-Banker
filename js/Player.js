@@ -1,5 +1,6 @@
 function Player() {
 	return {
+		gameObject: {},
 		loc: {
 			x: 0,
 			y: 15,
