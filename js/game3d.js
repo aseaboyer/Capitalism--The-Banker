@@ -4,6 +4,13 @@ var game = {
 	font: '20pt Roboto Condensed', // default game font name
 	phase: "menu",
 	phases: [ "load game", "menu", "load level", "play", "win", "lost" ], // for ref. @aseaboyer
+/*	keys: {
+		values: [ "up", "down", 0, 1, -1 ],
+		up: 'up',
+		down: 'up',
+		left: 'up',
+		right: 'up',
+	},*/
 	debug: false,
 	camera: {},
 	time: {
@@ -58,8 +65,18 @@ var game = {
 		this.time.update();
 		
 		// simple rotation animation
-		player.gameObject.rotation.x += 0.01;
-		player.gameObject.rotation.y += 0.01;
+		if(keys.getStatus('w')) {
+			player.gameObject.rotation.x += 0.01;
+		}
+		if(keys.getStatus('s')) {
+			player.gameObject.rotation.x -= 0.01;
+		}
+		if(keys.getStatus('a')) {
+			player.gameObject.rotation.y += 0.01;
+		}
+		if(keys.getStatus('d')) {
+			player.gameObject.rotation.y -= 0.01;
+		}
 		
 		//console.log(this.font);
 		//context.font = '20pt '+this.font;
@@ -103,15 +120,40 @@ window.onload = function() {
 }
 // Game Object Creation above, as is in 2D
 
+// create a keys watch list with a human readable string value system
+document.addEventListener('keypress', function(e) {
+	var key = e.keyCode || e.which;
+	var keychar = String.fromCharCode(key);
 
-// add renderer
-/*
-function render() {
-	requestAnimationFrame(render);
-	renderer.render(scene, camera);
+	if(keychar == "W" || keychar == "w") { // up
+		keys.set('w', 'down');
+	}
+	if(keychar == "A" || keychar == "a") { // left
+		keys.set('a', 'down');
+	}
+	if(keychar == "S" || keychar == "s") { // down
+		keys.set('s', 'down');
+	}
+	if(keychar == "D" || keychar == "d") { // right
+		keys.set('d', 'down');
+	}
 	
-	// simple rotation animation
-	cube.rotation.x += 0.01;
-	cube.rotation.y += 0.01;
-}
-render();*/
+}, false);
+document.addEventListener('keyup', function(e) {
+	var key = e.keyCode || e.which;
+	var keychar = String.fromCharCode(key);
+	
+	if(keychar == "W" || keychar == "w") { // up
+		keys.set('w', 'up');
+	}
+	if(keychar == "A" || keychar == "a") { // left
+		keys.set('a', 'up');
+	}
+	if(keychar == "S" || keychar == "s") { // down
+		keys.set('s', 'up');
+	}
+	if(keychar == "D" || keychar == "d") { // right
+		keys.set('d', 'up');
+	}
+	
+}, false);
