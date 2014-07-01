@@ -49,7 +49,13 @@ var game = {
 		var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 		var cube = new THREE.Mesh( geometry, material );
 		scene.add( cube );
-
+		
+		dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+		/*		dirLight.color.setHSV( 0.1, 0.1, 1 );
+				dirLight.position.set( -1, 1.75, 1 );
+				dirLight.position.multiplyScalar( 50 );*/
+		scene.add( dirLight );
+		
 		camera.position.z = 5;
 		
 		game.camera = camera;
@@ -66,27 +72,30 @@ var game = {
 		
 		// simple rotation animation
 		if(keys.getStatus('w')) {
-			player.gameObject.rotation.x += 0.01;
+			player.gameObject.rotation.x += (0.02 * this.time.delta);
 		}
 		if(keys.getStatus('s')) {
-			player.gameObject.rotation.x -= 0.01;
+			player.gameObject.rotation.x -= (0.02 * this.time.delta);
 		}
 		if(keys.getStatus('a')) {
-			player.gameObject.rotation.y += 0.01;
+			player.gameObject.rotation.y += (0.02 * this.time.delta);
 		}
 		if(keys.getStatus('d')) {
-			player.gameObject.rotation.y -= 0.01;
+			player.gameObject.rotation.y -= (0.02 * this.time.delta);
 		}
 		
+		// Can't create 2D Text in 3D space. One solution is to position a second, GUI layer, canvas over the 3d canvas
+		/*
 		//console.log(this.font);
-		//context.font = '20pt '+this.font;
-		//context.textAlign = 'center';
-		//context.fillStyle = '#990000';
-		//context.fillText('Hello World!', 100, 100);
+		this.context.font = this.font;
+		this.context.textAlign = 'center';
+		this.context.fillStyle = '#fff';
+		//this.context.fillText("Test!",10,90); // not sure why we can't render text - might be an issue
+		*/
 	},
 	draw: function() {
 		//requestAnimationFrame(this.draw);
-		game.context.render(game.scene, game.camera);
+		this.context.render(game.scene, game.camera);
 	},
 };
 
